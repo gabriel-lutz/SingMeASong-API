@@ -13,7 +13,6 @@ export async function insertSongIntoDatabase(name: string , youtubeLink: string)
 
     }catch(err){
         console.log(err)
-        return 500
     }
 }
 
@@ -29,6 +28,14 @@ export async function checkDuplicated(name: string , youtubeLink: string){
          return query.rows[0]   
     }catch(err){
         console.log(err)
-        return 500
+    }
+}
+
+export async function getAllSongs(){
+    try{
+        const query = await connection.query("SELECT * FROM recommendations")
+        return query.rows
+    }catch(err){
+        console.log(err)
     }
 }

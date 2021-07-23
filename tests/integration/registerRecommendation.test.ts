@@ -1,7 +1,7 @@
 import "../../src/setup.ts";
 import supertest from "supertest";
 import app from "../../src/app";
-import connection from "../../src/database";
+
 import { clearDatabase, closeConnection } from "./utils/database";
 import { insertSong } from "./factories/recommendationFactory";
 
@@ -37,10 +37,11 @@ describe("POST /recommendations", () => {
       youtubeLink: "https://youtu.be/rPleicjySdI"
     }
 
-    await insertSong()
+    await insertSong(0)
     
     const response = await agent.post("/recommendations").send(body);
     expect(response.status).toBe(409);
   });
 });
+
 afterAll(closeConnection)

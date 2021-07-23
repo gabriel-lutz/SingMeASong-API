@@ -7,11 +7,22 @@ export async function checkIfSongExistsById(id:number){
         FROM recommendations 
         WHERE id = $1
         `, [id])
-        if(query.rows[0]){
-            return true
-        }else{
-            return false
-        }
+
+        return query.rows[0]
+    }catch(err){
+        console.log(err)
+        return 500
+    }
+}
+
+export async function deleteSongFromDatabase(id:number){
+    try{
+        await connection.query(`
+        DELETE 
+        FROM recommendations 
+        WHERE id = $1
+        `, [id])
+        return 200
     }catch(err){
         console.log(err)
         return 500
@@ -23,7 +34,19 @@ export async function registerUpvoteIntoDatabase(id:number){
         await connection.query(`
         UPDATE recommendations SET score = score+1 WHERE id = $1
         `, [id])
+        return 200
+    }catch(err){
+        console.log(err)
+        return 500
+    }
+}
 
+export async function registerDownvoteIntoDatabase(id:number){
+    try{
+        await connection.query(`
+        UPDATE recommendations SET score = score-1 WHERE id = $1
+        `, [id])
+        return 200
     }catch(err){
         console.log(err)
         return 500

@@ -7,3 +7,8 @@ export async function clearDatabase () {
 export async function closeConnection () {
   await connection.end();
 }
+
+export async function checkListLength(){
+  const query = await connection.query(`SELECT * FROM recommendations`)
+  return query.rows.length
+}

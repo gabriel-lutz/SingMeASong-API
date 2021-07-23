@@ -1,6 +1,6 @@
 import {Request, Response} from "express"
-import connection from "../database"
-import { insertSong } from "../services/songsService"
+
+import { getRandomRecommendationService, insertSong } from "../services/songsService"
 import { recommendationBody } from "../schemas"
 
 export async function registerRecommendation(req: Request, res: Response){
@@ -17,5 +17,14 @@ export async function registerRecommendation(req: Request, res: Response){
         console.log(err)
         res.send(500)
     }
+}
 
+export async function getRandomRecommendation(req: Request, res: Response){
+    try{
+        const statusOrList = await getRandomRecommendationService()
+        res.send(statusOrList)
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }
 }
