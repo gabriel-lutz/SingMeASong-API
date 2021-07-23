@@ -1,5 +1,4 @@
-import { truncate } from "fs";
-import { insertSongIntoDatabase, checkDuplicated, getAllSongs } from "../repositories/songsRepository";
+import { insertSongIntoDatabase, checkDuplicated, getAllSongs, getTopSongs } from "../repositories/songsRepository";
 
 
 export async function insertSong(name: string, youtubeLink:string){
@@ -42,6 +41,20 @@ export async function getRandomRecommendationService(){
                 return songsList[Math.floor(Math.random() * songsList.length)]
             }
         }
+    }catch(err){
+        console.log(err)
+        return 500
+    }
+}
+
+export async function getTopRecommendationsService(amount: number){
+    try{
+        const songsList = await getTopSongs(amount)
+        if(!songsList.length){
+            return 404
+        }else{
+            return songsList
+        } 
     }catch(err){
         console.log(err)
         return 500

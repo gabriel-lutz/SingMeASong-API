@@ -3,7 +3,7 @@ import supertest from "supertest";
 import app from "../../src/app";
 
 import { clearDatabase, closeConnection } from "./utils/database";
-import { insertRandomSong, insertSong } from "./factories/recommendationFactory";
+import { insertRandomSongs } from "./factories/recommendationFactory";
 
 const agent = supertest(app)
 
@@ -11,7 +11,7 @@ describe("GET /recommendations/random", () => {
   
 
   it("should answer with a random song if there are any song in database ", async () => {
-    await insertRandomSong(20, 30)
+    await insertRandomSongs(20, 30)
     const response = await agent.get("/recommendations/random")
     expect(response.body).toEqual(
         expect.objectContaining({

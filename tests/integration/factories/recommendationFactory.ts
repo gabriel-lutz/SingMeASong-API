@@ -13,7 +13,7 @@ export async function insertSong (vote:number) {
         ,[name, youtubeLink, vote])
 }
 
-export async function insertRandomSong(quantity: number, score: number){
+export async function insertRandomSongs(quantity: number, score: number){
     for( let i = 0; i <= quantity; i++){
         await connection.query(`
             INSERT INTO recommendations 

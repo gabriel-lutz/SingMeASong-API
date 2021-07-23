@@ -39,3 +39,14 @@ export async function getAllSongs(){
         console.log(err)
     }
 }
+
+export async function getTopSongs(amount:number){
+    try{
+        const query = await connection.query(`
+        SELECT * FROM recommendations ORDER BY score DESC LIMIT $1
+        `, [amount])
+        return query.rows
+    }catch(err){
+        console.log(err)
+    }
+}

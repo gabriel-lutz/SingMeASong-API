@@ -1,6 +1,6 @@
 import {Request, Response} from "express"
 
-import { getRandomRecommendationService, insertSong } from "../services/songsService"
+import { getRandomRecommendationService, getTopRecommendationsService, insertSong } from "../services/songsService"
 import { recommendationBody } from "../schemas"
 
 export async function registerRecommendation(req: Request, res: Response){
@@ -23,6 +23,19 @@ export async function getRandomRecommendation(req: Request, res: Response){
     try{
         const statusOrList = await getRandomRecommendationService()
         res.send(statusOrList)
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }
+}
+
+export async function getTopRecommendations(req: Request, res: Response){
+    try{
+        let amount = Number(req.params.amount)
+        if(isNaN(amount) || amount <= 0){
+            amount = 10 
+        }
+        res.send(await getTopRecommendationsService(amount))
     }catch(err){
         console.log(err)
         res.sendStatus(500)
