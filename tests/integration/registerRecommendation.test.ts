@@ -11,7 +11,7 @@ const agent = supertest(app)
 describe("POST /recommendations", () => {
   beforeEach(clearDatabase)
 
-  it("should answer with status code 200 for a new and valid song", async () => {
+  it("should answer with status code 201 for a new and valid song", async () => {
     const body = {
       name: "Test",
       youtubeLink: "https://youtu.be/rPleicjySdI"

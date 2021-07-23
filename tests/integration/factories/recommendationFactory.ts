@@ -5,10 +5,10 @@ export async function insertSong () {
     const youtubeLink = "https://youtu.be/rPleicjySdI"
 
     await connection.query(`
-    INSERT INTO recommendations 
-    (name, "youtubeLink", score) 
-    VALUES 
-    ($1, $2, 0)`
-    ,[name, youtubeLink])
+        INSERT INTO recommendations 
+        (name, "youtubeLink", score) 
+        VALUES 
+        ($1, $2, 0)`
+        ,[name, youtubeLink])
 }
 
