@@ -1,24 +1,30 @@
 import { insertSongIntoDatabase, checkDuplicated, getAllSongs, getTopSongs } from "../repositories/songsRepository";
 
-
 export async function insertSong(name: string, youtubeLink:string){
     try{
-        const duplicated = await checkDuplicated(name, youtubeLink)
+        const duplicated = await checkDuplicated({name, youtubeLink})
         if(duplicated){
             return 409
         }
-        return await insertSongIntoDatabase(name, youtubeLink)
+        return await insertSongIntoDatabase({name, youtubeLink})
     }catch(err){
         console.log(err)
         return 500
     }
 }
 
-export async function getRandomRecommendationService(){
+interface Recommendation {
+    id: number,
+    name:string,
+    youtubeLink:string,
+    score:number
+}
+
+export async function getRandomRecommendationService(): Promise<Recommendation>{
     try{
         const songsList = await getAllSongs()
         if(!songsList.length){
-            return 404
+            return null
         }
         
         if(Math.random() >= 0.7){
@@ -43,21 +49,19 @@ export async function getRandomRecommendationService(){
         }
     }catch(err){
         console.log(err)
-        return 500
     }
 }
 
-export async function getTopRecommendationsService(amount: number){
+export async function getTopRecommendationsService(amount: number): Promise<Recommendation[]>{
     try{
         const songsList = await getTopSongs(amount)
         if(!songsList.length){
-            return 404
+            return null
         }else{
             return songsList
         } 
     }catch(err){
         console.log(err)
-        return 500
     }
 }
 

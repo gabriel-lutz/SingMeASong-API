@@ -1,6 +1,20 @@
 import connection from "../database";
 
-export async function insertSongIntoDatabase(name: string , youtubeLink: string){
+export interface QueryResult {
+    id: number,
+    name:string,
+    youtubeLink:string,
+    score:number
+}
+
+interface QuerySearchData { 
+    name: string,
+    youtubeLink: string
+}
+
+
+
+export async function insertSongIntoDatabase(data: QuerySearchData): Promise<number>{
     try{
         
         await connection.query(`
@@ -8,7 +22,7 @@ export async function insertSongIntoDatabase(name: string , youtubeLink: string)
             (name, "youtubeLink", score) 
             VALUES 
             ($1, $2, 0)`
-            ,[name, youtubeLink])
+            ,[data.name, data.youtubeLink])
         return 201
 
     }catch(err){
@@ -16,14 +30,15 @@ export async function insertSongIntoDatabase(name: string , youtubeLink: string)
     }
 }
 
-export async function checkDuplicated(name: string , youtubeLink: string){
+
+export async function checkDuplicated(data: QuerySearchData):Promise<QueryResult>{
     try{
         
         const query = await connection.query(`
             SELECT * FROM recommendations
             WHERE name = $1 OR "youtubeLink" = $2
             `
-            ,[name, youtubeLink]) 
+            ,[data.name, data.youtubeLink]) 
 
          return query.rows[0]   
     }catch(err){
@@ -31,7 +46,7 @@ export async function checkDuplicated(name: string , youtubeLink: string){
     }
 }
 
-export async function getAllSongs(){
+export async function getAllSongs(): Promise<QueryResult[]>{
     try{
         const query = await connection.query("SELECT * FROM recommendations")
         return query.rows
@@ -40,7 +55,7 @@ export async function getAllSongs(){
     }
 }
 
-export async function getTopSongs(amount:number){
+export async function getTopSongs(amount:number): Promise<QueryResult[]>{
     try{
         const query = await connection.query(`
         SELECT * FROM recommendations ORDER BY score DESC LIMIT $1

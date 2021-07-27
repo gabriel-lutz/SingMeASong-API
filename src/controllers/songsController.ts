@@ -9,20 +9,23 @@ export async function registerRecommendation(req: Request, res: Response){
         if(validation.error){
             return res.sendStatus(400)
         }
-        const {name, youtubeLink} = req.body
+        const {name, youtubeLink}:{name:string; youtubeLink:string} = req.body
 
-        const status: number = await insertSong(name, youtubeLink)
+        const status = await insertSong(name, youtubeLink)
         res.sendStatus(status)
     }catch(err){
         console.log(err)
-        res.send(500)
+        res.sendStatus(500)
     }
 }
 
 export async function getRandomRecommendation(req: Request, res: Response){
     try{
-        const statusOrList = await getRandomRecommendationService()
-        res.send(statusOrList)
+        const song = await getRandomRecommendationService()
+        if(song === null){
+            return res.sendStatus(404)
+        }
+        res.send(song)
     }catch(err){
         console.log(err)
         res.sendStatus(500)
@@ -35,7 +38,11 @@ export async function getTopRecommendations(req: Request, res: Response){
         if(isNaN(amount) || amount <= 0){
             amount = 10 
         }
-        res.send(await getTopRecommendationsService(amount))
+        const list = await getTopRecommendationsService(amount)
+        if(list === null){
+            res.sendStatus(404)
+        }
+        res.send(list)
     }catch(err){
         console.log(err)
         res.sendStatus(500)

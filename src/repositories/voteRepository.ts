@@ -1,6 +1,7 @@
 import connection from "../database";
+import { QueryResult } from "./songsRepository"
 
-export async function checkIfSongExistsById(id:number){
+export async function checkIfSongExistsById(id:number): Promise<QueryResult>{
     try{
         const query = await connection.query(`
         SELECT * 
@@ -11,7 +12,6 @@ export async function checkIfSongExistsById(id:number){
         return query.rows[0]
     }catch(err){
         console.log(err)
-        return 500
     }
 }
 
